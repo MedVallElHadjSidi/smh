@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<title>Insert title here</title>
+</head>
+<body>
+<h2>hello</h2>
+
+<table>
+
+<thead><tr>
+<td>ID</td>
+<td>Date</td>
+<td>DB</td>
+<td>DF</td>
+<td>Matricule</td>
+</tr>
+
+</thead>
+<tbody>
+<tr th:each="tache:${taches}">
+<td th:text="${tache.id}"></td>
+<td th:text="${tache.dateday}"></td>
+<td th:text="${tache.datedebut}"></td>
+<td th:text="${tache.datefint}"></td>
+<td th:text="${tache.employer.id}"></td>
+
+
+</tr>
+
+</tbody>
+</table>
+</body>
+</html>
