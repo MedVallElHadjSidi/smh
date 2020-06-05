@@ -25,7 +25,7 @@ th:href="@{css/bootstrap.min.css}"
 
 <div class="form-group">
 <label class="control-label">Matricule</label>
-<input type="text" name="matircule"  class="form-control" required="required">
+<input type="text" name="matircule"  class="form-control" required="required" value="000">
 <label class="control-label">Nom</label>
 <input type="text" name="nom"  class="form-control" required="required">
 <label class="control-label">Fonction</label>
@@ -35,6 +35,12 @@ th:href="@{css/bootstrap.min.css}"
 <button type="submit" class="btn btn-primary">ok</button>
 </div>
 
+ <img th:src="@{${valider}}" style="width: 40px;"/>
+ 
+ <label th:text=${matricule}>
+ 
+ 
+ </label>
 
 
 </form>

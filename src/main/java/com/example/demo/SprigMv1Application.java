@@ -1,28 +1,26 @@
 package com.example.demo;
 
-import java.text.DateFormat;
+
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 
-import com.example.demo.DAO.EmployerIm;
-import com.example.demo.DAO.TachesIm;
-import com.example.demo.Metier.IMetier;
-import com.example.demo.entity.Employer;
-import com.example.demo.entity.Taches;
+
+
+
+
 
 @SpringBootApplication
 public class SprigMv1Application {
 	
 
-	public static void main(String[] args) {
-	ApplicationContext	ctx=SpringApplication.run(SprigMv1Application.class, args);
+	public static void main(String[] args) throws ParseException {
+		SpringApplication.run(SprigMv1Application.class, args);
+	
 		
 		/*
 		 * EmployerIm em=ctx.getBean(EmployerIm.class); IMetier

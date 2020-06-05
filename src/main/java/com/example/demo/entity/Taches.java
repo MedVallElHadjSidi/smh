@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne; import
   public class Taches {
   
   @Id 
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
   
   @Temporal(TemporalType.DATE) 
@@ -32,7 +32,7 @@ import javax.persistence.ManyToOne; import
   @ManyToOne
   @JoinColumn(name = "Matricule_Em")
   private Employer employer;
-  @Column(name = "NbreNormale")
+  @Column(name = "total_Heure")
   private int total_Heure;
   
   @Column(name = "NbreNormale")
@@ -43,8 +43,12 @@ import javax.persistence.ManyToOne; import
   private int nbreSup40;
   @Column(name = "NbreHS50")
   private int nbreSup50;
+  
+
   @Column(name = "NbreHS100")
   private int nbreSup100;
+  
+
 public Long getId() {
 	return id;
 }
