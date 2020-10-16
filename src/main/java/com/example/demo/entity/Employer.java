@@ -74,7 +74,11 @@ public Employer() {
 	super();
 }
 
-@Override
+	  public Employer(String id) {
+		  this.id = id;
+	  }
+
+	  @Override
 public String toString() {
 	return "Employer [id=" + id + ", Nom=" + Nom + ", fonction=" + fonction + ", taches=" + taches + "]";
 }

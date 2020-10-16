@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne; import
   javax.persistence.Temporal; import javax.persistence.TemporalType;
-  
+
   @Entity 
   public class Taches {
   
@@ -47,9 +47,18 @@ import javax.persistence.ManyToOne; import
 
   @Column(name = "NbreHS100")
   private int nbreSup100;
-  
+  @Column(name = "Panier")
+  private int panier;
 
-public Long getId() {
+      public void setPanier(int panier) {
+          this.panier = panier;
+      }
+
+      public int getPanier() {
+          return panier;
+      }
+
+      public Long getId() {
 	return id;
 }
 public void setId(Long id) {

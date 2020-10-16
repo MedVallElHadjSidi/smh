@@ -4,6 +4,9 @@ package com.example.demo.DAO;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,14 +27,35 @@ public interface TachesIm extends JpaRepository<Taches, Long>{
 	@Query("select t from Taches t , Employer e where  t.dateday between :x and :y and t.employer.id like :z and t.employer.id=e.id")
 	public List<Taches> SommeSemaine(@Param("x")Date d1,@Param("y")Date d2,@Param("z")String matricule);
 	
+	
+
 	@Query("select sum(t.nbreSup15) from Taches t , Employer e where  t.dateday between :x and :y and t.employer.id like :z and t.employer.id=e.id")
 	public int SommeSup15(@Param("x")Date d1,@Param("y")Date d2,@Param("z")String matricule);
 	
 	
 	@Query("select sum(t.nbreSup40) from Taches t , Employer e where  t.dateday between :x and :y and t.employer.id like :z and t.employer.id=e.id")
 	public int SommeSup40(@Param("x")Date d1,@Param("y")Date d2,@Param("z")String matricule);
+	@Query("select sum(ta.nbreHtNormale) from Taches ta , Employer ep where  ta.dateday between :d1 and :d2 and ta.employer.id like :m and ta.employer.id=ep.id")
+	public int SommeHeureNormaleSecuriter(@Param("m")String matricule,@Param("d1")Date d1,@Param("d2")Date d2);
+
+	@Query("select sum(tn.nbreHtNormale) from Taches tn , Employer en where  tn.dateday between :x and :y and tn.employer.id like :z and tn.employer.id=en.id")
+	public int SommeHN(@Param("x")Date d1,@Param("y")Date d2,@Param("z")String matricule);
+
+	@Query("select sum(t.nbreSup50) from Taches t , Employer e where  t.dateday between :x and :y and t.employer.id like :z and t.employer.id=e.id")
+	public int SommeSup50(@Param("x")Date d1,@Param("y")Date d2,@Param("z")String matricule);
+
+	@Query("select sum(t.nbreSup100) from Taches t , Employer e where  t.dateday between :x and :y and t.employer.id like :z and t.employer.id=e.id")
+	public int SommeSup100(@Param("x")Date d1,@Param("y")Date d2,@Param("z")String matricule);
+
+	@Query("select sum(t.total_Heure) from Taches t , Employer e where  t.dateday between :x and :y and t.employer.id like :z and t.employer.id=e.id")
+	public int SommeHt(@Param("x")Date d1,@Param("y")Date d2,@Param("z")String matricule);
+
+	@Query("select sum(t.panier) from Taches t , Employer e where  t.dateday between :x and :y and t.employer.id like :z and t.employer.id=e.id")
+	public int SommePanier(@Param("x")Date d1,@Param("y")Date d2,@Param("z")String matricule);
 	
-	
+
+	@Query("select tm from Taches tm, Employer ep where tm.employer.id like:x and tm.employer.id=ep.id")
+	public Page<Taches> Chercherbymotcler(@Param("x")String matricule,Pageable pageable);
 	
 	
 }
