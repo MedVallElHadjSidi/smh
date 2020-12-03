@@ -9,6 +9,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import com.example.demo.DAO.UtilisateurRepository;
+import com.example.demo.entity.Role;
+import com.example.demo.entity.Utilisateur;
+import com.example.demo.services.AccountService;
 import com.sun.javafx.collections.MappingChange;
 import org.apache.commons.compress.utils.IOUtils;
 import javax.servlet.ServletContext;
@@ -19,6 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +44,11 @@ import com.example.demo.excel.ExcelFileExporter;
 public class TachesContolleur {
 	@Autowired
 	ExcelFileExporter exel;
+	@Autowired
+	private AccountService accountService;
+
+	@Autowired
+	private UtilisateurRepository utilisateurRepository;
 	
 	
 	
@@ -214,10 +225,194 @@ public class TachesContolleur {
 	
 
 	@RequestMapping(value = "/")
-	public String quoditienne() {
+	public String quoditienne(Model model,   @AuthenticationPrincipal UserDetails currentUser) {
+		Utilisateur user=utilisateurRepository.findByUsername(currentUser.getUsername());
+		System.out.println(user.getNom());
+
+		for(Role r:user.getRoles()){
+			if(r.getRoleName().equals("USER")){
+
+
+				return "Jours";
+
+			}
+			else if(r.getRoleName().equals("ADMIN")){
+				return  "tem";
+
+			}
+
+		}
+
 		return "Jours";
 	}
-	
+
+	@RequestMapping(value = "/chaquejours",method = RequestMethod.POST)
+	public String chaqueJours(Model model,
+							  @RequestParam(name = "matircule")String matricule,
+							  @RequestParam(name="Dureedb")String db,
+							  @RequestParam(name = "Dureef")String df,
+							  @RequestParam(name = "Dureej")String date) {
+		String valider="";
+		String failse="";
+		String comment="";
+
+
+		Taches tache=new Taches();
+		if(employerim.existsById(matricule)) {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			//SimpleDateFormat formatter7 = new SimpleDateFormat("MM-dd-yyyy");
+			DateFormat formatter2 = new SimpleDateFormat("HH:mm");
+			DateFormat formatter3 = new SimpleDateFormat("HH:mm");
+			try {
+				Date dureeb=formatter3.parse(db);
+				Date dureef=formatter2.parse(df);
+				Date journee=formatter.parse(date);
+				tache.setDateday(journee);
+				tache.setDatedebut(dureeb);
+				tache.setDatefint(dureef);
+
+				//System.out.println("DayOfMonth"+calendar.DAY_OF_MONTH);
+
+				em=(Employer)employerim.findById(matricule).get();
+				tache.setPanier(imetier.CalulePanier(tache));
+				tache.setEmployer(em);
+				Taches tv=null;
+				Taches tach=tachesim.SommeJous(tache.getEmployer().getId());
+				
+
+
+				if(tach==null){
+					System.out.println("tach null");
+					if (tache.getDateday().getDay()==5){
+						System.out.println("tach null ms tache Vendredi ");
+						Taches taches=tachesim.save(imetier.TACHESCOMPLETSUPVendredi(tache));
+
+					}
+					else if (tache.getDateday().getDay()==6|| tache.getDateday().getDay()==0){
+						System.out.println("tach null ms tache wekend ");
+						Taches taches=tachesim.save(imetier.TacheWeekend(tache));
+
+					}
+					else{
+						System.out.println("tach null ms tache un jour du semanine ");
+						Taches taches=tachesim.save(imetier.TacheCompletJour(tache));
+
+					}
+
+				}
+
+				else {
+					System.out.println(tach.getId());
+					System.out.println("Numero wekend tache"+ imetier.IdentiqueWeekend(tache.getDateday(), tach.getDateday()));
+					System.out.println("numero semamine"+imetier.NUmeroweekend(tache.getDateday()));
+				
+
+					System.out.println("tach  ! null  ");
+					if (tache.getDateday().getDay()==6||tache.getDateday().getDay()==0){
+						System.out.println("tach !null ms tache weekend");
+						Taches taches=tachesim.save(imetier.TacheWeekend(tache));
+
+
+					}
+					else{
+						System.out.println("tach !null  tache n'est pas wekend ");
+						
+						if (imetier.IdentiqueWeekend(tache.getDateday(),tach.getDateday())){
+							System.out.println("tach !null  tache n'est pas wekend  et tache et tach meme wekend");
+
+							if (!imetier.IdentiqueDate(tache.getDateday(),tach.getDateday())){
+								System.out.println("tach !null  tache n'est pas wekend  et tache et tach meme wekend ms jour #");
+
+								if (tache.getDateday().getDay()==5){
+									System.out.println("tach !null  tache n'est pas wekend  et tache et tach meme wekend +vndr");
+
+									Taches taches=tachesim.save(imetier.TACHESCOMPLETVendredi(tache,tach));
+
+								}
+								else {
+									System.out.println("tach !null  tache n'est pas wekend  et tache et tach meme  wekend  m #j");
+
+									Taches taches=tachesim.save(imetier.TachesCompletJoursSup(tache,tach));
+
+								}
+
+
+							}
+							else{
+								if (tache.getDateday().getDay()==5){
+									Taches taches=tachesim.save(imetier.MemeJours(tache,tach));
+
+								}
+								else {
+									Taches taches=tachesim.save(imetier.MemeJours(tache,tach));
+
+								}
+
+							}
+
+
+
+						}
+						else{
+							System.out.println("new wekend");
+							if (tache.getDateday().getDay()==1){
+								System.out.println("on 'est la lundi ");
+								Taches taches=tachesim.save(imetier.TacheCompletJour(tache));
+
+							}
+
+						else if (tache.getDateday().getDay()==5){
+								Taches taches=tachesim.save(imetier.TACHESCOMPLETSUPVendredi(tache));
+
+							}
+							else{
+								System.out.println("on 'est la ");
+								Taches taches=tachesim.save(imetier.TacheCompletJour(tache));
+							}
+
+
+
+						}
+
+
+
+
+					}
+
+				}
+
+
+
+
+
+
+               /*Calendar first=(Calendar) calendar1.clone();
+				first.add(calendar1.DAY_OF_WEEK,first.getFirstDayOfWeek()-first.get(Calendar.DAY_OF_WEEK));
+				System.out.println("first"+first);
+				System.out.println("resultat"+formatter5.format(first.getTime()));*/
+
+
+
+
+
+
+
+			}
+			catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+		else {
+
+			failse="images/dow22.png";
+			model.addAttribute("etat",failse);
+			comment="Desoler cet employer n'existe pas!"+" "+"verfier matricule";
+			model.addAttribute("comment",comment);
+		}
+
+		return "Jours";
+	}
+/*
 	@RequestMapping(value = "/chaquejours",method = RequestMethod.POST)
 	public String chaqueJours(Model model,
 			@RequestParam(name = "matircule")String matricule,
@@ -241,6 +436,11 @@ public class TachesContolleur {
 				tache.setDateday(journee);
 				tache.setDatedebut(dureeb);
 				tache.setDatefint(dureef);
+				Calendar calendar=Calendar.getInstance();
+				calendar.setTime(journee);
+				System.out.println("calender"+calendar);
+				//System.out.println("DayOfMonth"+calendar.DAY_OF_MONTH);
+
 				em=(Employer)employerim.findById(matricule).get();
 				tache.setPanier(imetier.CalulePanier(tache));
 				tache.setEmployer(em);
@@ -251,8 +451,10 @@ public class TachesContolleur {
               System.out.println(tache.getDateday().getDay());
 
 				if(tache.getDateday().getDay()==6||tache.getDateday().getDay()==0){
+					System.out.println("wekend");
 					tachesim.save(imetier.TacheWeekend(tache));
 				}
+
            else  if(tach==null) {
               	if (tache.getEmployer().getFonction().equals("Securiter")){
 
@@ -265,6 +467,27 @@ public class TachesContolleur {
 					System.out.println("yes");
 
 				}
+				}
+              	else{
+
+					tv=imetier.TacheCompletJour(tache);
+					if(tv!=null) {
+						tachesim.save(tv);
+						valider="images/valider.jpg";
+						comment="vous vient d'enregistrer la tache de l'employer"+" : "+tv.getEmployer().getId();
+
+						model.addAttribute("etat",valider);
+						model.addAttribute("comment",comment);
+
+					}
+					else {
+						failse="images/dow22.png";
+						model.addAttribute("etat",failse);
+						comment="on a rencontrer une probleme concernant tache de l'employer"+" : "+tache.getEmployer().getId();
+						model.addAttribute("comment",comment);
+					}
+
+
 				}
 
 
@@ -296,6 +519,21 @@ public class TachesContolleur {
 						}
 						else
 						{
+							Taches tachs=tachesim.save(imetier.TachesCompletJoursSup(tache,tach));
+							if(tachs!=null){
+							valider="images/valider.jpg";
+							comment="vous vient d'enregistrer la tache de l'employer"+" : "+tachs.getEmployer().getId();
+
+							model.addAttribute("etat",valider);
+							model.addAttribute("comment",comment);
+
+						}
+					else {
+							failse="images/dow22.png";
+							model.addAttribute("etat",failse);
+							comment="on a rencontrer une probleme concernant tache de l'employer"+" : "+tache.getEmployer().getId();
+							model.addAttribute("comment",comment);
+						}
 
 
 						}
@@ -324,7 +562,7 @@ public class TachesContolleur {
 		return "Jours";
 	}
 	
-	
+*/
 	@RequestMapping(value = "/download",method = RequestMethod.GET)
     public void downloadExcel(HttpServletResponse response, @RequestParam(name = "d1")String d1,@RequestParam(name = "d2")String d2,@RequestParam(name = "m")String m) throws IOException {
 	
@@ -354,6 +592,10 @@ public class TachesContolleur {
 
 
 	}
+
+
+
+
 	
 	
 

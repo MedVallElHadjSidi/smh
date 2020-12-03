@@ -18,7 +18,10 @@ public interface TachesIm extends JpaRepository<Taches, Long>{
 	
 	@Query("select distinct d.dateday from Taches d, Employer l where DAYOFWEEK(d.dateday)=2 and d.dateday between d.dateday and :x and DATEDIFF(:x,d.dateday) between 0 and 4 ")
 	public Date DebutSemaine(@Param("x")Date d1);
-	
+	@Query("select distinct min(t.dateday) from Taches t, Employer er where DAYOFWEEK(t.dateday) between 2 and 6   and t.dateday between t.dateday and :d and DATEDIFF(:d,t.dateday) between 0 and 4 and t.employer.id like:mat and t.employer.id=er.id ")
+	public Date DebutRell(@Param("d")Date d1,@Param("mat")String matricule);
+
+
 	
 	
 	@Query("select max(b) from Taches b, Employer em where b.employer.id like:x and b.employer.id=em.id")
@@ -56,6 +59,8 @@ public interface TachesIm extends JpaRepository<Taches, Long>{
 
 	@Query("select tm from Taches tm, Employer ep where tm.employer.id like:x and tm.employer.id=ep.id")
 	public Page<Taches> Chercherbymotcler(@Param("x")String matricule,Pageable pageable);
+
+	public  List<Taches> findByDateday(@Param("date")Date date);
 	
 	
 }

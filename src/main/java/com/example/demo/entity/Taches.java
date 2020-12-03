@@ -49,6 +49,15 @@ import javax.persistence.ManyToOne; import
   private int nbreSup100;
   @Column(name = "Panier")
   private int panier;
+  private  int tHs;
+
+      public int gettHs() {
+          return tHs;
+      }
+
+      public void settHs(int tHs) {
+          this.tHs = tHs;
+      }
 
       public void setPanier(int panier) {
           this.panier = panier;
@@ -133,6 +142,12 @@ public Taches(Date dateday, Date datedebut, Date datefint, Employer employer) {
 }
 public Taches() {
 	super();
+}
+
+@Override
+public String toString() {
+	// TODO Auto-generated method stub
+	return super.toString();
 }
   
   

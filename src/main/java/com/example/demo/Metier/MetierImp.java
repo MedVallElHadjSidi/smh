@@ -1,6 +1,8 @@
-
-  package com.example.demo.Metier;
+package com.example.demo.Metier;
   
+  import java.text.ParseException;
+  import java.text.SimpleDateFormat;
+  import java.util.Calendar;
   import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,427 +22,917 @@ import com.example.demo.entity.Taches;
 	@Override
 	public Taches TacheCompletJour(Taches t) {
 		// TODO Auto-generated method stub
-		int n=NombreHeureJours(ConverteDate(t.getDatedebut()),ConverteDate(t.getDatefint()));
-		  t.setTotal_Heure(n);
-		  /*datedebut>0*/
-		  if(t.getDatedebut().getHours()>0) {
-			  if(t.getDatedebut().getHours()<5) {
-				  if(n<=9) {
-					  t.setNbreHtNormale(n);
-				  }
+		int n = NombreHeureJours(ConverteDate(t.getDatedebut()), ConverteDate(t.getDatefint()));
+		t.setTotal_Heure(n);
+		if(n<=9){
+			t.setNbreHtNormale(n);
+			if(n==9){
+				t.setPanier(1);
 
-				  else if(t.getDatefint().getHours()>0&&t.getDatefint().getHours()<=23&&t.getDatedebut().getHours()<t.getDatefint().getHours())
-				  {
-					  if(t.getDatefint().getHours()==23) {
-						  t.setNbreHtNormale(9);
-						
-							t.setNbreSup50(NombreHeureJours(79200,ConverteDate(t.getDatefint())));
-							t.setNbreSup15(n-9-t.getNbreSup50());
-							if(t.getNbreSup15()>8) {
-								t.setNbreSup40(t.getNbreSup15()-8);
-								t.setNbreSup15(8);
-								if(t.getNbreSup40()>6) {
-									t.setNbreSup50(t.getNbreSup40()-6+t.getNbreSup50());
-									t.setNbreSup40(6);
-								}
-								
-							}
-					  }
-					  else {
-						  
-						  t.setNbreHtNormale(9);
-							t.setNbreSup15(n-9);
-					  }
-					  
-					  
-				  }
-				  else if(t.getDatefint().getHours()>0&&t.getDatefint().getHours()<=t.getDatedebut().getHours()) {
-					  if(t.getDatefint().getHours()<=8) {
-						  if(t.getDatefint().getHours()<=5) {
-							  if(n<=9) {
-								  t.setNbreHtNormale(n);
-								  
-							  }
-							  else {
-							  t.setNbreHtNormale(9);
-							
-								t.setNbreSup50(NombreHeureJours(79200,ConverteDate(t.getDatefint())));
-								t.setNbreSup15(n-(9+t.getNbreSup50()));
-								if(t.getNbreSup15()>8) {
-									t.setNbreSup40(t.getNbreSup15()-8);
-									t.setNbreSup15(8);
-									if(t.getNbreSup40()>6) {
-										t.setNbreSup50(t.getNbreSup40()-6+t.getNbreSup50());
-										t.setNbreSup40(6);
-									}
-									
-								}}
-						  }
-						  else {
-							  if(n<=9) {
-								  t.setNbreHtNormale(n);
-							  }
-							  else {
-							  t.setNbreHtNormale(9);
-								t.setNbreSup50(NombreHeureJours(79200,18000));
-								t.setNbreSup15((n-9-t.getNbreSup50())+(NombreHeureJours(18000,ConverteDate(t.getDatefint()))));
-								if(t.getNbreSup15()>8) {
-									t.setNbreSup40(t.getNbreSup15()-8);
-									t.setNbreSup15(8);
-									if(t.getNbreSup40()>6) {
-										t.setNbreSup50(t.getNbreSup40()-6+t.getNbreSup50());
-										t.setNbreSup40(6);
-									}}
-									
-								}
-							  
-								  
-							  
-						  }
-						  
-					  }
-				  }
-				  else {
-					  t.setNbreHtNormale(9);
-						
-						t.setNbreSup50(NombreHeureJours(79200,ConverteDate(t.getDatefint())));
-						t.setNbreSup15(n-(9+t.getNbreSup50()));
-						if(t.getNbreSup15()>8) {
-							t.setNbreSup40(t.getNbreSup15()-8);
-							t.setNbreSup15(8);
-							if(t.getNbreSup40()>6) {
-								t.setNbreSup50(t.getNbreSup40()-6+t.getNbreSup50());
-								t.setNbreSup40(6);
-							}
-							
-						}
-					  
-					  
-				  }
-				  
-				  
-			  }
-			  
-			  
-			  /*datedebut==8*/
-			  else  if(t.getDatedebut().getHours()==8) {
-				  /*datefin<17*/
-				  if(n<=9) {
-					  t.setNbreHtNormale(n);
-				  }
-				  /*datefin=17*/
-				 
-				  /*datefin>17&datefin<=23*/
-				  else if(t.getDatefint().getHours()>0&&t.getDatefint().getHours()<=23&&t.getDatedebut().getHours()<t.getDatefint().getHours()&&t.getDatefint().getHours()>17)
-				  {
-					  if(t.getDatefint().getHours()==23) {
-						  t.setNbreHtNormale(NombreHeureJours(ConverteDate(t.getDatedebut()),61200));
-							t.setNbreSup15(NombreHeureJours(61200,79200));
-							t.setNbreSup50(NombreHeureJours(79200,ConverteDate(t.getDatefint())));
-							if(t.getNbreSup15()>8) {
-								t.setNbreSup40(t.getNbreSup15()-8);
-								t.setNbreSup15(8);
-								if(t.getNbreSup40()>6) {
-									t.setNbreSup50(t.getNbreSup40()-6+t.getNbreSup50());
-									t.setNbreSup40(6);
-								}
-								
-							}
-						  
-						  
-					  }
-					  else {
-						  
-						  t.setNbreHtNormale(NombreHeureJours(ConverteDate(t.getDatedebut()),61200));
-							t.setNbreSup15(NombreHeureJours(61200,ConverteDate(t.getDatefint())));
-							if(t.getNbreSup15()>8) {
-								t.setNbreSup40(t.getNbreSup15()-8);
-								t.setNbreSup15(8);
-								if(t.getNbreSup40()>6) {
-									t.setNbreSup50(t.getNbreSup40()-6+t.getNbreSup50());
-									t.setNbreSup40(6);
-								}
-								
-							}
-					  }
-					  
-					  
-					  
-				  }
-				  /*datefin>0*/
-				  else if(t.getDatefint().getHours()>0&&t.getDatefint().getHours()<=t.getDatedebut().getHours())
-				  {
-					  if(t.getDatefint().getHours()<=8) {
-						  if(t.getDatefint().getHours()<=5) {
-							  
-							  t.setNbreHtNormale(NombreHeureJours(ConverteDate(t.getDatedebut()),61200));
-								t.setNbreSup15(NombreHeureJours(61200,79200));
-								t.setNbreSup50(NombreHeureJours(79200,ConverteDate(t.getDatefint())));
-								if(t.getNbreSup15()>8) {
-									t.setNbreSup40(t.getNbreSup15()-8);
-									t.setNbreSup15(8);
-									if(t.getNbreSup40()>6) {
-										t.setNbreSup50(t.getNbreSup40()-6+t.getNbreSup50());
-										t.setNbreSup40(6);
-									}
-									
-								}
-						  }
-						  else {
-							  t.setNbreHtNormale(NombreHeureJours(ConverteDate(t.getDatedebut()),61200));
-								t.setNbreSup15(NombreHeureJours(61200,79200));
-								t.setNbreSup50(NombreHeureJours(79200,18000));
-								t.setNbreSup15(t.getNbreSup15()+(NombreHeureJours(18000,ConverteDate(t.getDatefint()))));
-								if(t.getNbreSup15()>8) {
-									t.setNbreSup40(t.getNbreSup15()-8);
-									t.setNbreSup15(8);
-									if(t.getNbreSup40()>6) {
-										t.setNbreSup50(t.getNbreSup40()-6+t.getNbreSup50());
-										t.setNbreSup40(6);
-									}
-									
-								}
-							  
-								  
-							  
-						  }
-						  
-					  }
-				  }
-				  /*commence	08	a	00*/
-				  else {
-					  t.setNbreHtNormale(NombreHeureJours(ConverteDate(t.getDatedebut()),61200));
-						t.setNbreSup15(NombreHeureJours(61200,79200));
-						t.setNbreSup50(NombreHeureJours(79200,ConverteDate(t.getDatefint())));
-					  
-						if(t.getNbreSup15()>8) {
-							t.setNbreSup40(t.getNbreSup15()-8);
-							t.setNbreSup15(8);
-							if(t.getNbreSup40()>6) {
-								t.setNbreSup50(t.getNbreSup40()-6+t.getNbreSup50());
-								t.setNbreSup40(6);
-							}
-							
-						}
-					  
-				  }
-				  
-				  
-				  
-				  
-				  
-			  }
-			  else if(t.getDatedebut().getHours()==5) {
-				  if(n<=9) {
-					  t.setNbreHtNormale(n);
-				  }
+			}
 
-				  else if(t.getDatefint().getHours()>0&&t.getDatefint().getHours()<=23&&t.getDatedebut().getHours()<t.getDatefint().getHours())
-				  {
-					  if(t.getDatefint().getHours()==23) {
-						  t.setNbreHtNormale(9);
-							
-							t.setNbreSup50(NombreHeureJours(79200,ConverteDate(t.getDatefint())));
-							t.setNbreSup15(n-9-t.getNbreSup50());
-							if(t.getNbreSup15()>8) {
-								t.setNbreSup40(t.getNbreSup15()-8);
-								t.setNbreSup15(8);
-								if(t.getNbreSup40()>6) {
-									t.setNbreSup50(t.getNbreSup40()-6+t.getNbreSup50());
-									t.setNbreSup40(6);
-								}
-								
-							}
-						  
-					  }
-					  else {
-						  
-						  t.setNbreHtNormale(9);
-							t.setNbreSup15(n-9);
-							if(t.getNbreSup15()>8) {
-								t.setNbreSup40(t.getNbreSup15()-8);
-								t.setNbreSup15(8);
-								if(t.getNbreSup40()>6) {
-									t.setNbreSup50(t.getNbreSup40()-6+t.getNbreSup50());
-									t.setNbreSup40(6);
-								}
-								
-							}
-					  }
-					  
-					  
-				  }
-				  else if(t.getDatefint().getHours()>0&&t.getDatefint().getHours()<=t.getDatedebut().getHours())
-				  {
-					  if(t.getDatefint().getHours()<=8) {
-						  if(t.getDatefint().getHours()<=5) {
-							  
-							  t.setNbreHtNormale(9);
-								
-								t.setNbreSup50(NombreHeureJours(79200,ConverteDate(t.getDatefint())));
-								t.setNbreSup15(n-(9+t.getNbreSup50()));
-								if(t.getNbreSup15()>8) {
-									t.setNbreSup40(t.getNbreSup15()-8);
-									t.setNbreSup15(8);
-									if(t.getNbreSup40()>6) {
-										t.setNbreSup50(t.getNbreSup40()-6+t.getNbreSup50());
-										t.setNbreSup40(6);
-									}
-									
-								}
-						  }
-						  else {
-							  t.setNbreHtNormale(9);
-								
-								t.setNbreSup50(NombreHeureJours(79200,18000));
-								
-								t.setNbreSup15(n-(9+t.getNbreSup50())+NombreHeureJours(18000,ConverteDate(t.getDatefint())));
-								if(t.getNbreSup15()>8) {
-									t.setNbreSup40(t.getNbreSup15()-8);
-									t.setNbreSup15(8);
-									if(t.getNbreSup40()>6) {
-										t.setNbreSup50(t.getNbreSup40()-6+t.getNbreSup50());
-										t.setNbreSup40(6);
-									}
-									
-								}
-							  
-								  
-							  
-						  }
-						  
-					  }
-				  }
-				  else {
-					  t.setNbreHtNormale(9);
-						
+
+		}
+		else {
+			t.setPanier(1);
+			t.settHs(n-9);
+			if(t.getDatedebut().getHours()>=5){
+				if(t.getDatefint().getHours()>t.getDatedebut().getHours()){
+					if(t.getDatefint().getHours()<23){
+
+						t.setNbreHtNormale(9);
+						t.setNbreSup15(n-9);
+
+
+					}
+					else{
+
+						t.setNbreHtNormale(9);
+						t.setNbreSup50(1);
+						t.setNbreSup15(n-9-1);
+
+					}
+
+				}
+				else{
+					if(t.getDatefint().getHours()<=5){
+						t.setNbreHtNormale(9);
+						t.setNbreSup50(NombreHeureJours(79200,ConverteDate(t.getDatefint())));
+						t.setNbreSup15(n-9-t.getNbreSup50());
+					}
+					else{
+						t.setNbreHtNormale(9);
 						t.setNbreSup50(NombreHeureJours(79200,18000));
-						
-						t.setNbreSup15(n-(9+t.getNbreSup50())+NombreHeureJours(18000,ConverteDate(t.getDatefint())));
-						if(t.getNbreSup15()>8) {
-							t.setNbreSup40(t.getNbreSup15()-8);
-							t.setNbreSup15(8);
-							if(t.getNbreSup40()>6) {
-								t.setNbreSup50(t.getNbreSup40()-6+t.getNbreSup50());
-								t.setNbreSup40(6);
-							}
-							
-						}
-					  
-					  
-				  }
-			  }
-			  else {
-			  	/*****************************************/
-
-				  if(n<=9) {
-					  t.setNbreHtNormale(n);
-				  }
-				  else{
-				  	if(t.getDatedebut().getHours()>=5){
-				  		if (t.getDatefint().getHours()<=23&&t.getDatefint().getHours()>t.getDatedebut().getHours())
-						{
-
-
-						}
-
+						t.setNbreSup15(n-9-t.getNbreSup50());
 
 					}
 
 
-				  }
 
-				  
-			  }
-			  
-		  }
-		  else {
-			  if(n<=9) {
-				  t.setNbreHtNormale(n);
-				  
-			  }
-			  else {
-				  
-				  
-	  if(t.getDatefint().getHours()>0&&t.getDatefint().getHours()<=17&&t.getDatedebut().getHours()<t.getDatefint().getHours())
-	  {
-						  
-						  if(n<=9) {
-							  t.setNbreHtNormale(n);
-							  
-						  }
-					  else {
-						  t.setNbreHtNormale(9);
-						  t.setNbreSup15(n-9);
-						  if(t.getNbreSup15()>8) {
-								t.setNbreSup40(t.getNbreSup15()-8);
-								t.setNbreSup15(8);
-								if(t.getNbreSup40()>6) {
-									t.setNbreSup50(t.getNbreSup40()-6+t.getNbreSup50());
-									t.setNbreSup40(6);
-								}
-								
-							}
-					  }
-					  
-				  }
-				  
-	  else if(t.getDatefint().getHours()>0&&t.getDatefint().getHours()<=23&&t.getDatedebut().getHours()<t.getDatefint().getHours()&&t.getDatefint().getHours()>17)
-  {
-	  if(t.getDatefint().getHours()==23) {
-		  t.setNbreHtNormale(9);
-		
-			t.setNbreSup50(NombreHeureJours(79200,ConverteDate(t.getDatefint())));
-			t.setNbreSup15(n-9-t.getNbreSup50());
-			if(t.getNbreSup15()>8) {
-				t.setNbreSup40(t.getNbreSup15()-8);
-				t.setNbreSup15(8);
-				if(t.getNbreSup40()>6) {
-					t.setNbreSup50(t.getNbreSup40()-6+t.getNbreSup50());
-					t.setNbreSup40(6);
+
 				}
-				
+
+
+
+
 			}
-		  
-	  }
-	  else {
-		  
-		  t.setNbreHtNormale(9);
-			t.setNbreSup15(n-9);
-			if(t.getNbreSup15()>8) {
-				t.setNbreSup40(t.getNbreSup15()-8);
-				t.setNbreSup15(8);
-				if(t.getNbreSup40()>6) {
-					t.setNbreSup50(t.getNbreSup40()-6+t.getNbreSup50());
-					t.setNbreSup40(6);
-				} }
-	  }
-  }  
-	  else {
-		  t.setNbreHtNormale(9);
-			
-			t.setNbreSup50(NombreHeureJours(79200,ConverteDate(t.getDatefint())));
-			t.setNbreSup15(n-9-t.getNbreSup50());
-			if(t.getNbreSup15()>8) {
-				t.setNbreSup40(t.getNbreSup15()-8);
-				t.setNbreSup15(8);
-				if(t.getNbreSup40()>6) {
-					t.setNbreSup50(t.getNbreSup40()-6+t.getNbreSup50());
-					t.setNbreSup40(6);
+			else{
+				if(t.getDatefint().getHours()<=5){
+					t.setNbreHtNormale(9);
+					t.setNbreSup50(NombreHeureJours(ConverteDate(t.getDatedebut()),18000)+NombreHeureJours(79200,ConverteDate(t.getDatefint())));
+					t.setNbreSup15(n-9-t.getNbreSup50());
+
+
 				}
+				else{
+					if(t.getDatefint().getHours()==23){
+						t.setNbreHtNormale(9);
+						t.setNbreSup50(NombreHeureJours(ConverteDate(t.getDatedebut()),18000)+NombreHeureJours(79200,ConverteDate(t.getDatefint())));
+						t.setNbreSup15(n-9-t.getNbreSup50());
+					}
+					else{
+						t.setNbreHtNormale(9);
+						t.setNbreSup50(NombreHeureJours(ConverteDate(t.getDatedebut()),18000));
+						t.setNbreSup15(n-9-t.getNbreSup50());
+
+					}
+
+				}
+
 			}
-	  }
-			  }
-			  
-			  
-		  }
-		  
-	
-		
-		return t;
+
+
+
+
+		}
+
+
+
+
+		return  t;
 	}
 
-	@Override
+	  @Override
+	  public Taches TACHESCOMPLETVendredi(Taches t1,Taches t2) throws ParseException {
+		  SimpleDateFormat formatter6 = new SimpleDateFormat("yyyy-MM-dd");
+
+		  int n = NombreHeureJours(ConverteDate(t1.getDatedebut()), ConverteDate(t1.getDatefint()));
+		  t1.setTotal_Heure(n);
+		 // Date debutwekend = tachesim.DebutSemaine(t1.getDateday());
+		  String d1=formatter6.format(DebutWeekend(t1.getDateday()));
+		  Date debutwekend=formatter6.parse(d1);
+		  int regarde=tachesim.SommeSup15(debutwekend,t1.getDateday(),t1.getEmployer().getId());
+		  int regarde2=tachesim.SommeSup40(debutwekend,t1.getDateday(),t1.getEmployer().getId());
+		  System.out.println("Nombre15"+":"+regarde);
+		  System.out.println("Nombre40"+":"+regarde2);
+		  if(n<=4){
+			  t1.setNbreHtNormale(n);
+			  if(n==9){
+				  t1.setPanier(1);
+
+			  }
+
+
+		  }
+
+
+		  else {
+
+
+			  t1.settHs(n - 4);
+			  if (n >= 9) {
+				  t1.setPanier(1);
+			  }
+			  if (!IdentiqueWeekend(t1.getDateday(), debutwekend)) {
+
+				  if (t1.getDatedebut().getHours() >= 5) {
+					  if (t1.getDatefint().getHours() > t1.getDatedebut().getHours()) {
+						  if (t1.getDatefint().getHours() < 23) {
+
+							  t1.setNbreHtNormale(4);
+							  
+							  
+							  if (regarde < 8) {
+								  t1.setNbreSup15(n - 4);
+									 if (regarde + t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8 - regarde);
+										 if (regarde2 + t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6 - regarde2);
+										 }
+
+									 }
+
+								 } else if (regarde == 8 && regarde2 < 6) {
+									 t1.setNbreSup40(n - 4);
+
+									 if (regarde2 + t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 - regarde2);
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n - 4);
+								 }
+
+
+						  } else {
+
+							  t1.setNbreHtNormale(4);
+							  t1.setNbreSup50(1);
+							
+							  
+							  
+							  if (regarde < 8) {
+								  t1.setNbreSup15(n - 4 - 1);
+									 if (regarde + t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8 - regarde);
+										 if (regarde2 + t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6 - regarde2);
+										 }
+
+									 }
+
+								 } else if (regarde == 8 && regarde2 < 6) {
+									  t1.setNbreSup40(n - 4 - 1);
+
+									 if (regarde2 + t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 - regarde2);
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n - 4);
+								 }
+							  
+							  
+							  
+							 
+
+						  }
+
+					  } else {
+						  if (t1.getDatefint().getHours() <= 5) {
+							  t1.setNbreHtNormale(4);
+							  t1.setNbreSup50(NombreHeureJours(79200, ConverteDate(t1.getDatefint())));
+							  
+							  if (regarde < 8) {
+								  t1.setNbreSup15(n - 4 - t1.getNbreSup50());
+									 if (regarde + t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8 - regarde);
+										 if (regarde2 + t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6 - regarde2);
+										 }
+
+									 }
+
+								 } else if (regarde == 8 && regarde2 < 6) {
+									 t1.setNbreSup40(n - 4 - t1.getNbreSup50());
+
+									 if (regarde2 + t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 - regarde2);
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n - 4);
+								 }
+							  
+							  
+						  } else {
+							  t1.setNbreHtNormale(4);
+							  t1.setNbreSup50(NombreHeureJours(79200, 18000));
+							 
+							  if (regarde < 8) {
+								  t1.setNbreSup15(n - 4 - t1.getNbreSup50());
+									 if (regarde + t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8 - regarde);
+										 if (regarde2 + t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6 - regarde2);
+										 }
+
+									 }
+
+								 } else if (regarde == 8 && regarde2 < 6) {
+									 t1.setNbreSup40(n - 4 - t1.getNbreSup50());
+
+									 if (regarde2 + t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 - regarde2);
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n - 4);
+								 }
+
+						  }
+
+
+					  }
+
+
+				  } else {
+					  if (t1.getDatefint().getHours() <= 5) {
+						  t1.setNbreHtNormale(4);
+						  t1.setNbreSup50(NombreHeureJours(ConverteDate(t1.getDatedebut()), 18000) + NombreHeureJours(79200, ConverteDate(t1.getDatefint())));
+					
+						  
+						  if (regarde < 8) {
+							  t1.setNbreSup15(n - 4 - t1.getNbreSup50());
+								 if (regarde + t1.getNbreSup15() > 8) {
+									 t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+									 t1.setNbreSup15(8 - regarde);
+									 if (regarde2 + t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 - regarde2);
+									 }
+
+								 }
+
+							 } else if (regarde == 8 && regarde2 < 6) {
+								 t1.setNbreSup40(n - 4 - t1.getNbreSup50());
+
+								 if (regarde2 + t1.getNbreSup40() > 6) {
+									 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+									 t1.setNbreSup40(6 - regarde2);
+								 }
+
+
+							 } else {
+
+								 t1.setNbreSup50(n - 4);
+							 }
+
+
+					  } else {
+						  if (t1.getDatefint().getHours() == 23) {
+							  t1.setNbreHtNormale(4);
+							  t1.setNbreSup50(NombreHeureJours(ConverteDate(t1.getDatedebut()), 18000) + NombreHeureJours(79200, ConverteDate(t1.getDatefint())));
+							
+							  if (regarde < 8) {
+								  t1.setNbreSup15(n - 4 - t1.getNbreSup50());
+									 if (regarde + t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8 - regarde);
+										 if (regarde2 + t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6 - regarde2);
+										 }
+
+									 }
+
+								 } else if (regarde == 8 && regarde2 < 6) {
+									 t1.setNbreSup40(n - 4 - t1.getNbreSup50());
+
+									 if (regarde2 + t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 - regarde2);
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n - 4);
+								 }
+						  } else {
+							  t1.setNbreHtNormale(4);
+							  t1.setNbreSup50(NombreHeureJours(ConverteDate(t1.getDatedebut()), 18000));
+							  if (regarde < 8) {
+								  t1.setNbreSup15(n - 4 - t1.getNbreSup50());
+									 if (regarde + t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8 - regarde);
+										 if (regarde2 + t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6 - regarde2);
+										 }
+
+									 }
+
+								 } else if (regarde == 8 && regarde2 < 6) {
+									 t1.setNbreSup40(n - 4 - t1.getNbreSup50());
+
+									 if (regarde2 + t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 - regarde2);
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n - 4);
+								 }
+
+						  }
+
+					  }
+
+				  }
+
+
+			  }
+			  else{
+				  if (t1.getDatedebut().getHours() >= 5) {
+					  if (t1.getDatefint().getHours() > t1.getDatedebut().getHours()) {
+						  if (t1.getDatefint().getHours() < 23) {
+
+							  t1.setNbreHtNormale(4);
+
+
+							  if (regarde < 8) {
+								  t1.setNbreSup15(n - 4);
+
+								  if (regarde + t1.getNbreSup15() > 8) {
+									  t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+									  t1.setNbreSup15(8 - regarde);
+									  if (regarde2 + t1.getNbreSup40() > 6) {
+										  t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										  t1.setNbreSup40(6 - regarde2);
+									  }
+
+								  }
+
+							  } else if (regarde == 8 && regarde2 < 6) {
+								  t1.setNbreSup40(n - 4);
+
+								  if (regarde2 + t1.getNbreSup40() > 6) {
+									  t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+									  t1.setNbreSup40(6 - regarde2);
+								  }
+
+
+							  } else {
+
+								  t1.setNbreSup50(n - 4);
+							  }
+
+
+
+						  } else {
+
+							  t1.setNbreHtNormale(4);
+							  t1.setNbreSup50(1);
+
+
+
+							  if (regarde < 8) {
+								  t1.setNbreSup15(n - 4 - 1);
+								  if (regarde + t1.getNbreSup15() > 8) {
+									  t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+									  t1.setNbreSup15(8 - regarde);
+									  if (regarde2 + t1.getNbreSup40() > 6) {
+										  t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										  t1.setNbreSup40(6 - regarde2);
+									  }
+
+								  }
+
+							  } else if (regarde == 8 && regarde2 < 6) {
+								  t1.setNbreSup40(n - 4 - 1);
+
+								  if (regarde2 + t1.getNbreSup40() > 6) {
+									  t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+									  t1.setNbreSup40(6 - regarde2);
+								  }
+
+
+							  } else {
+
+								  t1.setNbreSup50(n - 4);
+							  }
+
+						  }
+
+					  } else {
+						  if (t1.getDatefint().getHours() <= 5) {
+							  t1.setNbreHtNormale(4);
+							  t1.setNbreSup50(NombreHeureJours(79200, ConverteDate(t1.getDatefint())));
+
+							  if (regarde < 8) {
+								  t1.setNbreSup15(n - 4 - t1.getNbreSup50());
+
+
+								  if (regarde + t1.getNbreSup15() > 8) {
+									  t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+									  t1.setNbreSup15(8 - regarde);
+									  if (regarde2 + t1.getNbreSup40() > 6) {
+										  t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										  t1.setNbreSup40(6 - regarde2);
+									  }
+
+								  }
+
+							  } else if (regarde == 8 && regarde2 < 6) {
+								  t1.setNbreSup40(n - 4 - t1.getNbreSup50());
+
+
+
+								  if (regarde2 + t1.getNbreSup40() > 6) {
+									  t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+									  t1.setNbreSup40(6 - regarde2);
+								  }
+
+
+							  } else {
+
+								  t1.setNbreSup50(n - 4);
+							  }
+
+						  } else {
+							  t1.setNbreHtNormale(4);
+							  t1.setNbreSup50(NombreHeureJours(79200, 18000));
+
+
+
+							  if (regarde < 8) {
+								  t1.setNbreSup15(n - 4 - t1.getNbreSup50());
+
+								  if (regarde + t1.getNbreSup15() > 8) {
+									  t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+									  t1.setNbreSup15(8 - regarde);
+									  if (regarde2 + t1.getNbreSup40() > 6) {
+										  t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										  t1.setNbreSup40(6 - regarde2);
+									  }
+
+								  }
+
+							  } else if (regarde == 8 && regarde2 < 6) {
+								  t1.setNbreSup40(n - 4 - t1.getNbreSup50());
+
+
+
+								  if (regarde2 + t1.getNbreSup40() > 6) {
+									  t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+									  t1.setNbreSup40(6 - regarde2);
+								  }
+
+
+							  } else {
+
+								  t1.setNbreSup50(n - 4);
+							  }
+
+						  }
+
+
+					  }
+
+
+				  } else {
+					  if (t1.getDatefint().getHours() <= 5) {
+						  t1.setNbreHtNormale(4);
+						  t1.setNbreSup50(NombreHeureJours(ConverteDate(t1.getDatedebut()), 18000) + NombreHeureJours(79200, ConverteDate(t1.getDatefint())));
+						  if (regarde < 8) {
+							  t1.setNbreSup15(n - 4 - t1.getNbreSup50());
+
+							  if (regarde + t1.getNbreSup15() > 8) {
+								  t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+								  t1.setNbreSup15(8 - regarde);
+								  if (regarde2 + t1.getNbreSup40() > 6) {
+									  t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+									  t1.setNbreSup40(6 - regarde2);
+								  }
+
+							  }
+
+						  } else if (regarde == 8 && regarde2 < 6) {
+							  t1.setNbreSup40(n - 4 - t1.getNbreSup50());
+
+
+
+							  if (regarde2 + t1.getNbreSup40() > 6) {
+								  t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+								  t1.setNbreSup40(6 - regarde2);
+							  }
+
+
+						  } else {
+
+							  t1.setNbreSup50(n - 4);
+						  }
+
+
+					  } else {
+						  if (t1.getDatefint().getHours() == 23) {
+							  t1.setNbreHtNormale(4);
+							  t1.setNbreSup50(NombreHeureJours(ConverteDate(t1.getDatedebut()), 18000) + NombreHeureJours(79200, ConverteDate(t1.getDatefint())));
+							  if (regarde < 8) {
+								  t1.setNbreSup15(n - 4 - t1.getNbreSup50());
+
+								  if (regarde + t1.getNbreSup15() > 8) {
+									  t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+									  t1.setNbreSup15(8 - regarde);
+									  if (regarde2 + t1.getNbreSup40() > 6) {
+										  t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										  t1.setNbreSup40(6 - regarde2);
+									  }
+
+								  }
+
+							  } else if (regarde == 8 && regarde2 < 6) {
+								  t1.setNbreSup40(n - 4 - t1.getNbreSup50());
+
+
+
+								  if (regarde2 + t1.getNbreSup40() > 6) {
+									  t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+									  t1.setNbreSup40(6 - regarde2);
+								  }
+
+
+							  } else {
+
+								  t1.setNbreSup50(n - 4);
+							  }
+						  } else {
+							  t1.setNbreHtNormale(4);
+							  t1.setNbreSup50(NombreHeureJours(ConverteDate(t1.getDatedebut()), 18000));
+							  if (regarde < 8) {
+								  t1.setNbreSup15(n - 4 - t1.getNbreSup50());
+
+								  if (regarde + t1.getNbreSup15() > 8) {
+									  t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+									  t1.setNbreSup15(8 - regarde);
+									  if (regarde2 + t1.getNbreSup40() > 6) {
+										  t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										  t1.setNbreSup40(6 - regarde2);
+									  }
+
+								  }
+
+							  } else if (regarde == 8 && regarde2 < 6) {
+								  t1.setNbreSup40(n - 4 - t1.getNbreSup50());
+
+
+
+								  if (regarde2 + t1.getNbreSup40() > 6) {
+									  t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+									  t1.setNbreSup40(6 - regarde2);
+								  }
+
+
+							  } else {
+
+								  t1.setNbreSup50(n - 4);
+							  }
+
+						  }
+
+					  }
+
+				  }
+
+
+
+			  }
+		  }
+
+
+
+
+		  return  t1;
+	  }
+
+	  
+
+	  @Override
+	  public Taches TACHESCOMPLETSUPVendredi(Taches t1) {
+		  
+		  SimpleDateFormat formatter6 = new SimpleDateFormat("yyyy-MM-dd");
+
+		  int n = NombreHeureJours(ConverteDate(t1.getDatedebut()), ConverteDate(t1.getDatefint()));
+		  t1.setTotal_Heure(n);
+		 // Date debutwekend = tachesim.DebutSemaine(t1.getDateday());
+		 
+		  if(n<=4){
+			  t1.setNbreHtNormale(n);
+			  if(n==9){
+				  t1.setPanier(1);
+
+			  }
+
+
+		  }
+
+
+		  else {
+
+
+			  t1.settHs(n - 4);
+			  if (n >= 9) {
+				  t1.setPanier(1);
+			  }
+		
+
+				  if (t1.getDatedebut().getHours() >= 5) {
+					  if (t1.getDatefint().getHours() > t1.getDatedebut().getHours()) {
+						  if (t1.getDatefint().getHours() < 23) {
+
+							  t1.setNbreHtNormale(4);
+							  
+							  
+							  if (t1.getNbreSup15() < 8) {
+								  t1.setNbreSup15(n - 4);
+									 if (t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40(t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8 );
+										 if (t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50( t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6 );
+										 }
+
+									 }
+
+								 } else if (t1.getNbreSup15() == 8 && t1.getNbreSup40() < 6) {
+									 t1.setNbreSup40(n - 4);
+
+									 if (t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50( t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6);
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n - 4);
+								 }
+
+
+						  } else {
+
+							  t1.setNbreHtNormale(4);
+							  t1.setNbreSup50(1);
+							
+							  
+							  
+							  if (t1.getNbreSup15() < 8) {
+								  t1.setNbreSup15(n - 4 - 1);
+									 if ( t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40( t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8 );
+										 if (t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50( t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6 );
+										 }
+
+									 }
+
+								 } else if (t1.getNbreSup15() == 8 && t1.getNbreSup40() < 6) {
+									  t1.setNbreSup40(n - 4 - 1);
+
+									 if ( t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50( t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 );
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n - 4);
+								 }
+							  
+							  
+							  
+							 
+
+						  }
+
+					  } else {
+						  if (t1.getDatefint().getHours() <= 5) {
+							  t1.setNbreHtNormale(4);
+							  t1.setNbreSup50(NombreHeureJours(79200, ConverteDate(t1.getDatefint())));
+							  
+							  if (t1.getNbreSup15() < 8) {
+								  t1.setNbreSup15(n - 4 - t1.getNbreSup50());
+									 if (t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40(t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8 );
+										 if (t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50(t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6 );
+										 }
+
+									 }
+
+								 } else if (t1.getNbreSup15() == 8 && t1.getNbreSup40()< 6) {
+									 t1.setNbreSup40(n - 4 - t1.getNbreSup50());
+
+									 if (t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50( t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6);
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n - 4);
+								 }
+							  
+							  
+						  } else {
+							  t1.setNbreHtNormale(4);
+							  t1.setNbreSup50(NombreHeureJours(79200, 18000));
+							 
+							  if (t1.getNbreSup15() < 8) {
+								  t1.setNbreSup15(n - 4 - t1.getNbreSup50());
+									 if (t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40(t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8 );
+										 if (t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50( t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6 );
+										 }
+
+									 }
+
+								 } else if (t1.getNbreSup15() == 8 && t1.getNbreSup40()< 6) {
+									 t1.setNbreSup40(n - 4 - t1.getNbreSup50());
+
+									 if ( t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50( t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6);
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n - 4);
+								 }
+
+						  }
+
+
+					  }
+
+
+				  } else {
+					  if (t1.getDatefint().getHours() <= 5) {
+						  t1.setNbreHtNormale(4);
+						  t1.setNbreSup50(NombreHeureJours(ConverteDate(t1.getDatedebut()), 18000) + NombreHeureJours(79200, ConverteDate(t1.getDatefint())));
+					
+						  
+						  if (t1.getNbreSup15() < 8) {
+							  t1.setNbreSup15(n - 4 - t1.getNbreSup50());
+								 if ( t1.getNbreSup15() > 8) {
+									 t1.setNbreSup40( t1.getNbreSup15() - 8);
+									 t1.setNbreSup15(8 );
+									 if (t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6);
+									 }
+
+								 }
+
+							 } else if (t1.getNbreSup15() == 8 && t1.getNbreSup50() < 6) {
+								 t1.setNbreSup40(n - 4 - t1.getNbreSup50());
+
+								 if (t1.getNbreSup40() > 6) {
+									 t1.setNbreSup50(t1.getNbreSup40() - 6 + t1.getNbreSup50());
+									 t1.setNbreSup40(6);
+								 }
+
+
+							 } else {
+
+								 t1.setNbreSup50(n - 4);
+							 }
+
+
+					  } else {
+						  if (t1.getDatefint().getHours() == 23) {
+							  t1.setNbreHtNormale(4);
+							  t1.setNbreSup50(NombreHeureJours(ConverteDate(t1.getDatedebut()), 18000) + NombreHeureJours(79200, ConverteDate(t1.getDatefint())));
+							
+							  if (t1.getNbreSup15() < 8) {
+								  t1.setNbreSup15(n - 4 - t1.getNbreSup50());
+									 if (t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40( t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8);
+										 if (t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50( t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6);
+										 }
+
+									 }
+
+								 } else if (t1.getNbreSup15() == 8 && t1.getNbreSup40() < 6) {
+									 t1.setNbreSup40(n - 4 - t1.getNbreSup50());
+
+									 if ( t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 );
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n - 4);
+								 }
+						  } else {
+							  t1.setNbreHtNormale(4);
+							  t1.setNbreSup50(NombreHeureJours(ConverteDate(t1.getDatedebut()), 18000));
+							  if (t1.getNbreSup15()< 8) {
+								  t1.setNbreSup15(n - 4 - t1.getNbreSup50());
+									 if (t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40(t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8 );
+										 if ( t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50( t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6 );
+										 }
+
+									 }
+
+								 } else if (t1.getNbreSup15() == 8 && t1.getNbreSup40() < 6) {
+									 t1.setNbreSup40(n - 4 - t1.getNbreSup50());
+
+									 if (t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 );
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n - 4);
+								 }
+
+						  }
+
+					  }
+
+				  }
+
+
+			  }
+			 
+
+
+
+
+		  return  t1;
+		  
+
+	  }
+
+
+	  @Override
 	public int NombreHeureJours(int t1, int t2) {
 		// TODO Auto-generated method stub
 		  int rs=0;
@@ -456,11 +948,641 @@ import com.example.demo.entity.Taches;
 	}
 
 	@Override
-	public Taches MemeJours(Taches t1, Taches t2) {
+	public Taches MemeJours(Taches t1, Taches t2) throws ParseException {
 		
-		return t1;
+		 SimpleDateFormat formatter6 = new SimpleDateFormat("yyyy-MM-dd");
+
+
+		  int n = 0;
+		  int regarde=0;
+		  int regarde2=0;
+		  String d1=formatter6.format(DebutWeekend(t1.getDateday()));
+		  Date debutwekend=formatter6.parse(d1);
+		  regarde=tachesim.SommeSup15(debutwekend,t1.getDateday(),t1.getEmployer().getId());
+		  regarde2=tachesim.SommeSup40(debutwekend,t1.getDateday(),t1.getEmployer().getId());
+		  System.out.println("Nombre15"+":"+regarde);
+		  System.out.println("Nombre40"+":"+regarde2);
+
+
+
+		  n = NombreHeureJours(ConverteDate(t1.getDatedebut()), ConverteDate(t1.getDatefint()));
+		  t1.setTotal_Heure(n);
+		  int p=CalulePanier(t1);
+
+		 
+		
+			  t1.setPanier(p);
+			  t1.settHs(n);
+			 // Date debutwekend = tachesim.DebutSemaine(t1.getDateday());
+
+
+				 //System.out.println(IdentiqueWeekend(t1.getDateday(), debutwekend));
+			  System.out.println("identique tache-tach"+IdentiqueWeekend(t1.getDateday(), debutwekend));
+			
+					 if (t1.getDatedebut().getHours() >= 5) {
+						 if (t1.getDatefint().getHours() > t1.getDatedebut().getHours()) {
+							 if (t1.getDatefint().getHours() < 23) {
+
+								 t1.setNbreSup15(n);
+
+
+								 if (regarde < 8) {
+									
+									 if (regarde + t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8 - regarde);
+										 if (regarde2 + t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6 - regarde2);
+										 }
+
+									 }
+
+								 } else if (regarde == 8 && regarde2 < 6) {
+									 t1.setNbreSup40(n);
+
+									 if (regarde2 + t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 - regarde2);
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n);
+								 }
+
+
+							 } else {
+
+								 
+								 t1.setNbreSup50(1);
+								 t1.setNbreSup15(n-1);
+
+								 if (regarde < 8) {
+									
+									 if (regarde + t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8 - regarde);
+										 if (regarde2 + t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6 - regarde2);
+										 }
+
+									 }
+
+								 } else if (regarde == 8 && regarde2 < 6) {
+									 t1.setNbreSup40(n-1);
+
+									 if (regarde2 + t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 - regarde2);
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n);
+								 }
+
+							 }
+
+						 } else {
+							 if (t1.getDatefint().getHours() <= 5) {
+								
+								 t1.setNbreSup50(NombreHeureJours(79200, ConverteDate(t1.getDatefint())));
+								 t1.setNbreSup15(n-t1.getNbreSup50());
+
+								 if (regarde < 8) {
+									
+									 if (regarde + t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8 - regarde);
+										 if (regarde2 + t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6 - regarde2);
+										 }
+
+									 }
+
+								 } else if (regarde == 8 && regarde2 < 6) {
+									 t1.setNbreSup40(n - t1.getNbreSup50());
+
+									 if (regarde2 + t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 - regarde2);
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n);
+								 }
+
+
+							 } else {
+					
+								 t1.setNbreSup50(NombreHeureJours(79200, 18000));
+								 t1.setNbreSup15(n-t1.getNbreSup50());
+
+								 if (regarde < 8) {
+							
+									 if (regarde + t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8 - regarde);
+										 if (regarde2 + t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6 - regarde2);
+										 }
+
+									 }
+
+								 } else if (regarde == 8 && regarde2 < 6) {
+									 t1.setNbreSup40(n-t1.getNbreSup50());
+
+									 if (regarde2 + t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 - regarde2);
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n);
+								 }
+
+							 }
+
+
+						 }
+
+
+					 } else {
+						 if (t1.getDatefint().getHours() <= 5) {
+							
+							 t1.setNbreSup50(NombreHeureJours(ConverteDate(t1.getDatedebut()), 18000) + NombreHeureJours(79200, ConverteDate(t1.getDatefint())));
+							 t1.setNbreSup15(n - t1.getNbreSup50());
+
+							 if (regarde < 8) {
+								
+
+
+								 if (regarde + t1.getNbreSup15() > 8) {
+									 t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+									 t1.setNbreSup15(8 - regarde);
+									 if (regarde2 + t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 - regarde2);
+									 }
+
+								 }
+
+							 } else if (regarde == 8 && regarde2 < 6) {
+								 t1.setNbreSup40(n-t1.getNbreSup50());
+
+
+								 if (regarde2 + t1.getNbreSup40() > 6) {
+									 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+									 t1.setNbreSup40(6 - regarde2);
+								 }
+
+
+							 } else {
+
+								 t1.setNbreSup50(n);
+							 }
+
+
+						 } else {
+							 if (t1.getDatefint().getHours() == 23) {
+								
+								 t1.setNbreSup50(NombreHeureJours(ConverteDate(t1.getDatedebut()), 18000) + NombreHeureJours(79200, ConverteDate(t1.getDatefint())));
+								 t1.setNbreSup15(n- t1.getNbreSup50());
+
+								 if (regarde < 8) {
+									
+
+									 if (regarde + t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8 - regarde);
+										 if (regarde2 + t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6 - regarde2);
+										 }
+
+									 }
+
+								 } else if (regarde == 8 && regarde2 < 6) {
+									 t1.setNbreSup40(n  - t1.getNbreSup50());
+
+									 if (regarde2 + t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 - regarde2);
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n);
+								 }
+							 } else {
+							
+								 t1.setNbreSup50(NombreHeureJours(ConverteDate(t1.getDatedebut()), 18000));
+								 t1.setNbreSup15(n - t1.getNbreSup50());
+
+								 if (regarde < 8) {
+									 if (regarde + t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8 - regarde);
+										 if (regarde2 + t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6 - regarde2);
+										 }
+
+									 }
+
+								 } else if (regarde == 8 && regarde2 < 6) {
+									 t1.setNbreSup40(n  - t1.getNbreSup50());
+
+
+									 if (regarde2 + t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 - regarde2);
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n);
+								 }
+
+
+							 }
+
+						 }
+
+					 }
+
+
+				
+
+
+
+		  
+
+
+
+
+		  return t1;
+
 	}
 
+	
+
+	@Override
+	  public  Boolean IdentiqueDate(Date d1,Date d2){
+		  Calendar calendar=Calendar.getInstance();
+		  calendar.setTime(d1);
+		  Calendar calendar1=Calendar.getInstance();
+		  calendar1.setTime(d2);
+
+		  if (d1.getDay()==d2.getDay()&&d1.getMonth()==d2.getMonth()&&d1.getYear()==d2.getYear()&&calendar.DAY_OF_WEEK_IN_MONTH==calendar1.DAY_OF_WEEK_IN_MONTH){
+
+			  return  true;
+		  }
+
+		  return false;
+
+
+	  }
+
+	  @Override
+	  public Boolean IdentiqueWeekend(Date d1, Date d2) {
+		  Boolean  b=false;
+		  Calendar calendar=Calendar.getInstance();
+		  calendar.setTime(d1);
+		  System.out.println(calendar);
+		  Calendar calendar1=Calendar.getInstance();
+		  calendar1.setTime(d2);
+		  if (d1.getMonth()==d2.getMonth()&&d1.getYear()==d2.getYear()&&calendar.get(calendar.WEEK_OF_YEAR)==calendar1.get(calendar1.WEEK_OF_YEAR)){
+			  b=true;
+
+		
+		  }
+
+		  return b;
+	  }
+
+	  @Override
+	  public Date DebutWeekend(Date date) throws ParseException {
+		  SimpleDateFormat formatter5 = new SimpleDateFormat("yyyy-MM-dd");
+		  Calendar calendar1=Calendar.getInstance();
+		  calendar1.setTime(date);
+		  System.out.println("NumeroWeeknd tache"+calendar1.get(calendar1.WEEK_OF_YEAR));
+		  Calendar first=(Calendar) calendar1.clone();
+		  first.add(calendar1.DAY_OF_WEEK,first.getFirstDayOfWeek()-first.get(Calendar.DAY_OF_WEEK));
+		  System.out.print("debut week"+formatter5.format(first.getTime()));
+		  
+		  return first.getTime();
+	  }
+
+	  @Override
+	  public Taches TachesCompletJoursSup(Taches t1, Taches t2) throws ParseException {
+		  SimpleDateFormat formatter6 = new SimpleDateFormat("yyyy-MM-dd");
+
+
+		  int n = 0;
+		  int regarde=0;
+		  int regarde2=0;
+		  String d1=formatter6.format(DebutWeekend(t1.getDateday()));
+		  Date debutwekend=formatter6.parse(d1);
+		  regarde=tachesim.SommeSup15(debutwekend,t1.getDateday(),t1.getEmployer().getId());
+		  regarde2=tachesim.SommeSup40(debutwekend,t1.getDateday(),t1.getEmployer().getId());
+		  System.out.println("Nombre15"+":"+regarde);
+		  System.out.println("Nombre40"+":"+regarde2);
+
+
+
+		  n = NombreHeureJours(ConverteDate(t1.getDatedebut()), ConverteDate(t1.getDatefint()));
+		  t1.setTotal_Heure(n);
+
+		  if(n<=9){
+			  t1.setNbreHtNormale(n);
+			  if(n==9){
+				  t1.setPanier(1);
+
+			  }
+
+
+		  }
+		  else {
+			  t1.setPanier(1);
+			  t1.settHs(n - 9);
+			 // Date debutwekend = tachesim.DebutSemaine(t1.getDateday());
+
+
+				 //System.out.println(IdentiqueWeekend(t1.getDateday(), debutwekend));
+			  System.out.println("identique tache-tach"+IdentiqueWeekend(t1.getDateday(), debutwekend));
+			
+					 if (t1.getDatedebut().getHours() >= 5) {
+						 if (t1.getDatefint().getHours() > t1.getDatedebut().getHours()) {
+							 if (t1.getDatefint().getHours() < 23) {
+
+								 t1.setNbreHtNormale(9);
+
+
+								 if (regarde < 8) {
+									 t1.setNbreSup15(n - 9);
+									 if (regarde + t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8 - regarde);
+										 if (regarde2 + t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6 - regarde2);
+										 }
+
+									 }
+
+								 } else if (regarde == 8 && regarde2 < 6) {
+									 t1.setNbreSup40(n - 9);
+
+									 if (regarde2 + t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 - regarde2);
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n - 9);
+								 }
+
+
+							 } else {
+
+								 t1.setNbreHtNormale(9);
+								 t1.setNbreSup50(1);
+
+								 if (regarde < 8) {
+									 t1.setNbreSup15(n - 9 - 1);
+									 if (regarde + t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8 - regarde);
+										 if (regarde2 + t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6 - regarde2);
+										 }
+
+									 }
+
+								 } else if (regarde == 8 && regarde2 < 6) {
+									 t1.setNbreSup40(n - 9 - 1);
+
+									 if (regarde2 + t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 - regarde2);
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n - 9);
+								 }
+
+							 }
+
+						 } else {
+							 if (t1.getDatefint().getHours() <= 5) {
+								 t1.setNbreHtNormale(9);
+								 t1.setNbreSup50(NombreHeureJours(79200, ConverteDate(t1.getDatefint())));
+
+
+								 if (regarde < 8) {
+									 t1.setNbreSup15(n - 9 - t1.getNbreSup50());
+									 if (regarde + t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8 - regarde);
+										 if (regarde2 + t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6 - regarde2);
+										 }
+
+									 }
+
+								 } else if (regarde == 8 && regarde2 < 6) {
+									 t1.setNbreSup40(n - 9 - t1.getNbreSup50());
+
+									 if (regarde2 + t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 - regarde2);
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n - 9);
+								 }
+
+
+							 } else {
+								 t1.setNbreHtNormale(9);
+								 t1.setNbreSup50(NombreHeureJours(79200, 18000));
+
+
+								 if (regarde < 8) {
+									 t1.setNbreSup15(n - 9 - t1.getNbreSup50());
+									 if (regarde + t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8 - regarde);
+										 if (regarde2 + t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6 - regarde2);
+										 }
+
+									 }
+
+								 } else if (regarde == 8 && regarde2 < 6) {
+									 t1.setNbreSup40(n - 9 - t1.getNbreSup50());
+
+									 if (regarde2 + t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 - regarde2);
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n - 9);
+								 }
+
+							 }
+
+
+						 }
+
+
+					 } else {
+						 if (t1.getDatefint().getHours() <= 5) {
+							 t1.setNbreHtNormale(9);
+							 t1.setNbreSup50(NombreHeureJours(ConverteDate(t1.getDatedebut()), 18000) + NombreHeureJours(79200, ConverteDate(t1.getDatefint())));
+
+
+							 if (regarde < 8) {
+								 t1.setNbreSup15(n - 9 - t1.getNbreSup50());
+
+
+								 if (regarde + t1.getNbreSup15() > 8) {
+									 t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+									 t1.setNbreSup15(8 - regarde);
+									 if (regarde2 + t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 - regarde2);
+									 }
+
+								 }
+
+							 } else if (regarde == 8 && regarde2 < 6) {
+								 t1.setNbreSup40(n - 9 - t1.getNbreSup50());
+
+
+								 if (regarde2 + t1.getNbreSup40() > 6) {
+									 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+									 t1.setNbreSup40(6 - regarde2);
+								 }
+
+
+							 } else {
+
+								 t1.setNbreSup50(n - 9);
+							 }
+
+
+						 } else {
+							 if (t1.getDatefint().getHours() == 23) {
+								 t1.setNbreHtNormale(9);
+								 t1.setNbreSup50(NombreHeureJours(ConverteDate(t1.getDatedebut()), 18000) + NombreHeureJours(79200, ConverteDate(t1.getDatefint())));
+
+
+								 if (regarde < 8) {
+									 t1.setNbreSup15(n - 9 - t1.getNbreSup50());
+
+									 if (regarde + t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8 - regarde);
+										 if (regarde2 + t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6 - regarde2);
+										 }
+
+									 }
+
+								 } else if (regarde == 8 && regarde2 < 6) {
+									 t1.setNbreSup40(n - 9 - t1.getNbreSup50());
+
+									 if (regarde2 + t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 - regarde2);
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n - 9);
+								 }
+							 } else {
+								 t1.setNbreHtNormale(9);
+								 t1.setNbreSup50(NombreHeureJours(ConverteDate(t1.getDatedebut()), 18000));
+
+
+								 if (regarde < 8) {
+									 t1.setNbreSup15(n - 9 - t1.getNbreSup50());
+
+									 if (regarde + t1.getNbreSup15() > 8) {
+										 t1.setNbreSup40(regarde + t1.getNbreSup15() - 8);
+										 t1.setNbreSup15(8 - regarde);
+										 if (regarde2 + t1.getNbreSup40() > 6) {
+											 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+											 t1.setNbreSup40(6 - regarde2);
+										 }
+
+									 }
+
+								 } else if (regarde == 8 && regarde2 < 6) {
+									 t1.setNbreSup40(n - 9 - t1.getNbreSup50());
+
+
+									 if (regarde2 + t1.getNbreSup40() > 6) {
+										 t1.setNbreSup50(regarde2 + t1.getNbreSup40() - 6 + t1.getNbreSup50());
+										 t1.setNbreSup40(6 - regarde2);
+									 }
+
+
+								 } else {
+
+									 t1.setNbreSup50(n - 9);
+								 }
+
+
+							 }
+
+						 }
+
+					 }
+
+
+				
+
+
+
+		  }
+
+
+
+
+		  return t1;
+
+	}
+/*
 	@Override
 	public Taches TachesCompletJoursSup(Taches t1, Taches t2) {
 	
@@ -794,7 +1916,7 @@ import com.example.demo.entity.Taches;
 
 
 				 }
-				 /*datefin>0*/
+
 				 else if(t1.getDatefint().getHours()>0&&t1.getDatefint().getHours()<=t1.getDatedebut().getHours())
 				 {
 				 	if (n<=9){
@@ -1627,6 +2749,7 @@ import com.example.demo.entity.Taches;
 		 
 		return t1;
 	}
+*/
 
 	@Override
 	public Taches vider(Taches t) {
@@ -1653,7 +2776,6 @@ import com.example.demo.entity.Taches;
 		else {System.out.println("dans le plus part ");
 
 			Date	 debutwekend=tachesim.DebutSemaine(t1.getDateday());
-
 			int regarde=tachesim.SommeSup15(debutwekend, t1.getDateday(), t1.getEmployer().getId());
 			int regarde2=tachesim.SommeSup40(debutwekend, t1.getDateday(), t1.getEmployer().getId());
 			int nbreHeureSecurity=tachesim.SommeHeureNormaleSecuriter(t1.getEmployer().getId(),debutwekend,t1.getDateday());
@@ -3066,166 +4188,73 @@ import com.example.demo.entity.Taches;
 		// TODO Auto-generated method stub
           int n=NombreHeureJours(ConverteDate(t.getDatedebut()),ConverteDate(t.getDatefint()));
           System.out.println("ona rentrer dans la fonction TacheWeekend");
-
           t.setTotal_Heure(n);
-          if (t.getDatedebut().getHours()>0){
-              if (t.getDatedebut().getHours()<5){
-                  if (t.getDatefint().getHours()<=23&&t.getDatefint().getHours()>t.getDatefint().getHours())
-                  {
-                      if (t.getDatefint().getHours()<=22){
-                          t.setNbreSup50(NombreHeureJours(18000,ConverteDate(t.getDatefint())));
+      	if(t.getDatedebut().getHours()>=5){
+			if(t.getDatefint().getHours()>t.getDatedebut().getHours()){
+				if(t.getDatefint().getHours()<23){
+
+					t.setNbreSup50(n);
 
 
-                      }
-                      else {
-                          t.setNbreSup50(NombreHeureJours(18000, 79200));
-                          t.setNbreSup100(n - t.getNbreSup50());
+				}
+				else{
 
-                      }
+				
+					t.setNbreSup100(1);
+					t.setNbreSup50(n-1);
 
-                  }
-                  else if (t.getDatefint().getHours()==0){
-                      t.setNbreSup50(NombreHeureJours(18000,79200));
-                      t.setNbreSup100(n-t.getNbreSup50());
+				}
 
-                  }
-                  else {
-                      t.setNbreSup100(n);
+			}
+			else{
+				if(t.getDatefint().getHours()<=5){
+					
+					t.setNbreSup100(NombreHeureJours(79200,ConverteDate(t.getDatefint())));
+					t.setNbreSup50(n-t.getNbreSup100());
+				}
+				else{
+				
+					t.setNbreSup100(NombreHeureJours(79200,18000));
+					t.setNbreSup50(n-t.getNbreSup100());
 
-                  }
-
-
-
-              }
-              else if (t.getDatedebut().getHours()==5){
-                  if (t.getDatefint().getHours()<=23&&t.getDatefint().getHours()>t.getDatefint().getHours())
-                  {
-                      if (t.getDatefint().getHours()<=22)
-                      {
-                          t.setNbreSup50(n);
-                      }
-                      else {
-                          t.setNbreSup50(NombreHeureJours(18000, 79200));
-                          t.setNbreSup100(n - t.getNbreSup50());
-
-                      }
-
-                  }
-                  else if (t.getDatefint().getHours()==0){
-                      t.setNbreSup50(NombreHeureJours(18000,79200));
-                      t.setNbreSup100(n-t.getNbreSup50());
-
-                  }
-
-                  else {
-
-                      t.setNbreSup100(NombreHeureJours(79200,ConverteDate(t.getDatefint())));
-                      t.setNbreSup50(n-t.getNbreSup100());
-
-                  }
-
-
-
-              }
-              else if (t.getDatedebut().getHours()==8){
-                  if (t.getDatefint().getHours()<=23&&t.getDatefint().getHours()>t.getDatedebut().getHours())
-                  {
-                      if (t.getDatefint().getHours()<=22)
-                      {
-                          t.setNbreSup50(n);
-                      }
-                      else {
-                          t.setNbreSup50(1);
-                          t.setNbreSup100(n - t.getNbreSup50());
-
-                      }
-
-                  }
-                  else if (t.getDatefint().getHours()==0){
-
-                      t.setNbreSup100(2);
-                      t.setNbreSup50(n-t.getNbreSup100());
-
-                  }
-
-                  else {
-
-                      t.setNbreSup100(NombreHeureJours(79200,ConverteDate(t.getDatefint())));
-                      t.setNbreSup50(n-t.getNbreSup100());
-
-                  }
-
-
-              }
-              else {
-                  if (t.getDatefint().getHours()<=23&&t.getDatefint().getHours()>t.getDatefint().getHours())
-                  {
-                      if (t.getDatefint().getHours()<=22)
-                      {
-                          t.setNbreSup50(n);
-                      }
-                      else {
-                          t.setNbreSup50(1);
-                          t.setNbreSup100(n - t.getNbreSup50());
-
-                      }
-
-                  }
-                  else if (t.getDatefint().getHours()==0){
-
-                      t.setNbreSup100(2);
-                      t.setNbreSup50(n-t.getNbreSup100());
-
-                  }
-
-                  else {
-
-                      t.setNbreSup100(NombreHeureJours(79200,18000));
-                      t.setNbreSup50(n-t.getNbreSup100());
-
-                  }
+				}
 
 
 
 
-              }
-
-
-          }
-          else {
-              System.out.println("on entrer avec db=0");
-              if (t.getDatefint().getHours()<=23&&t.getDatefint().getHours()>=t.getDatefint().getHours())
-              {
-              	System.out.println("dureefin<=23");
-                  if (t.getDatefint().getHours()<=5&&t.getDatefint().getHours()>0){
-                      t.setNbreSup100(n);
-                  }
-
-              else  if (t.getDatefint().getHours()<=22&&t.getDatefint().getHours()>0)
-                  {
-                  	System.out.println("tojours");
-                      t.setNbreSup100(NombreHeureJours(ConverteDate(t.getDatedebut()),18000));
-                      t.setNbreSup50(n-t.getNbreSup100());
-                  }
-                  else {
-                      t.setNbreSup50(NombreHeureJours(18000,79200));
-                      t.setNbreSup100(n - t.getNbreSup50());
-
-                  }
-
-              }
-              else{
-
-                  t.setNbreSup50(NombreHeureJours(18000,79200));
-                  t.setNbreSup100(n - t.getNbreSup50());
-
-              }
+			}
 
 
 
 
-          }
+		}
+		else{
+			if(t.getDatefint().getHours()<=5){
+				
+				t.setNbreSup100(NombreHeureJours(ConverteDate(t.getDatedebut()),18000)+NombreHeureJours(79200,ConverteDate(t.getDatefint())));
+				t.setNbreSup50(n-t.getNbreSup100());
 
+
+			}
+			else{
+				if(t.getDatefint().getHours()==23){
+				
+					t.setNbreSup100(NombreHeureJours(ConverteDate(t.getDatedebut()),18000)+NombreHeureJours(79200,ConverteDate(t.getDatefint())));
+					t.setNbreSup50(n-t.getNbreSup100());
+				}
+				else{
+				
+					t.setNbreSup100(NombreHeureJours(ConverteDate(t.getDatedebut()),18000));
+					t.setNbreSup50(n-t.getNbreSup100());
+
+				}
+
+			}
+
+		}
+          
+          
+        
 
 		return t;
 	}
@@ -3236,6 +4265,48 @@ import com.example.demo.entity.Taches;
 		int nb=(t.getHours()*3600)+(t.getMinutes()*60);
 		
 		return nb;
+	}
+
+	@Override
+	public int NUmeroweekend(Date d1) {
+		// TODO Auto-generated method stub
+		  Calendar calendar=Calendar.getInstance();
+		  calendar.setTime(d1);
+		  
+		return calendar.get(calendar.WEEK_OF_YEAR);
+	}
+
+	@Override
+	public Taches SecuriryDebut(Taches t1) {
+		// TODO Auto-generated method stub
+		int n=NombreHeureJours(ConverteDate(t1.getDatedebut()), ConverteDate(t1.getDatefint()));
+		t1.setTotal_Heure(n);
+		
+		return t1;
+	}
+
+	@Override
+	public Taches SecuritySuplementaire(Taches t1, Taches t2) throws ParseException {
+		// TODO Auto-generated method stub
+
+		 SimpleDateFormat formatter6 = new SimpleDateFormat("yyyy-MM-dd");
+
+
+		  int n=NombreHeureJours(ConverteDate(t1.getDatedebut()), ConverteDate(t1.getDatefint()));
+			
+		  int regarde=0;
+		  int regarde2=0;
+		  String d1=formatter6.format(DebutWeekend(t1.getDateday()));
+		  Date debutwekend=formatter6.parse(d1);
+		  regarde=tachesim.SommeSup15(debutwekend,t1.getDateday(),t1.getEmployer().getId());
+		  regarde2=tachesim.SommeSup40(debutwekend,t1.getDateday(),t1.getEmployer().getId());
+		  System.out.println("Nombre15"+":"+regarde);
+		  System.out.println("Nombre40"+":"+regarde2);
+		  if()
+		  
+		  
+		
+		return null;
 	}
   
  
